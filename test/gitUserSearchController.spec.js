@@ -18,15 +18,30 @@ describe('GitUserSearchController', function() {
     beforeEach(inject(function($httpBackend) {
       httpBackend = $httpBackend;
       httpBackend
-        .when("GET", "https://api.github.com/search/users?access_token="+ token + "&q=hello")
+        .whenGET("https://api.github.com/search/users?access_token=09b1d837c281b9fd0891d7d00cd6951c5e2b6c64&q=hello")
         .respond(
           { items: items }
       );
+      httpBackend
+        .whenGET("https://api.github.com/users/hello?access_token=09b1d837c281b9fd0891d7d00cd6951c5e2b6c64")
+        .respond(
+           {login: 'hello', avatar_url: 'https://avatars.githubusercontent.com/u/30216?v=3', html_url: 'https://github.com/tansaku' }
+      );
+      httpBackend
+        .whenGET("https://api.github.com/users/stephenlloyd?access_token=09b1d837c281b9fd0891d7d00cd6951c5e2b6c64")
+        .respond(
+          { login: 'stephenlloyd', avatar_url: 'https://avatars.githubusercontent.com/u/196474?v=3', html_url: 'https://github.com/stephenlloyd' }
+      );
     }));
+    
+    afterEach(function() {
+      httpBackend.verifyNoOutstandingExpectation();
+      httpBackend.verifyNoOutstandingRequest();
+    });
     
     var items = [
       {
-        "login": "tansaku",
+        "login": "hello",
         "avatar_url": "https://avatars.githubusercontent.com/u/30216?v=3",
         "html_url": "https://github.com/tansaku"
       }, 
@@ -41,7 +56,7 @@ describe('GitUserSearchController', function() {
       ctrl.searchTerm = 'hello';
       ctrl.doSearch();
       httpBackend.flush();
-      expect(ctrl.searchResult.items).toEqual(items);
+      expect(ctrl.searchResult).toEqual(items);
     });
   });
   

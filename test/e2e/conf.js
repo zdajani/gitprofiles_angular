@@ -5,5 +5,6 @@ exports.config = {
   //   browserName: 'firefox'
   // }, {
   //   browserName : 'chrome'
-  // }] - test for multiple browsers
+  // }] 
+  // - test for multiple browsers
 };

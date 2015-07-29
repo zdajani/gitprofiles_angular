@@ -1,14 +1,19 @@
-githubUserSearch.controller('GitUserSearchController', ['$resource', function($resource) {
-  var self = this;
-  
-  var access_token = token; 
-  var searchResource = $resource('https://api.github.com/search/users' + "?access_token=" + access_token);
-  
-  
-  self.doSearch = function() {
-    self.searchResult = searchResource.get(
-      { q: self.searchTerm}
-    );
-  };
+githubUserSearch.controller('GitUserSearchController', ['Search', function(Search){
 
+  var self = this;
+
+  self.doSearch = function() {
+    if (self.searchTerm) {
+      self.searchResult = [];
+      Search.query(self.searchTerm)
+      .then(function(response) {
+        response.data.items.forEach(function(userInfo){
+          Search.query2(userInfo.login)
+          .then(function(details){
+            self.searchResult.push(details.data);
+          });
+        });
+      });
+    }
+  };
 }]);

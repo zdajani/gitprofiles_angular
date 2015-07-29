@@ -13,10 +13,14 @@ describe('Github Profile finder', function() {
   
   it('finds profiles', function() {
     
-    searchBox.sendKeys('tansaku');
+    searchBox.sendKeys('zdajani');
     searchButton.click();
 
-    var profiles = element.all(by.repeater('user in searchCtrl.searchResult.items'));
-    expect(profiles.get(0).getText()).toEqual('tansaku');
+    var profiles = element.all(by.repeater('user in searchCtrl.searchResult'));
+    expect(profiles.get(0).getText()).toContain("zdajani");
+    expect(profiles.get(0).getText()).toContain("Name: Zeina Dajani");
+    expect(profiles.get(0).getText()).toContain("Location: London");
+    expect(profiles.get(0).getText()).toContain("Public Repositories: 25");
+    expect(profiles.get(0).getText()).toContain("Followers: 8");
   });
 });
